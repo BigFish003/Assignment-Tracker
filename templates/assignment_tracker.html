@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Assignment Tracker</title>
+   <style>
+       body {
+           font-family: 'Arial', sans-serif;
+           background-color: #f4f4f4;
+           margin: 0;
+           padding: 0;
+       }
+
+       header {
+           background-color: #333;
+           color: #fff;
+           padding: 1em;
+           text-align: center;
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+       }
+
+       header img {
+           max-width: 50px; /* Adjust the max-width as needed */
+           height: auto;
+       }
+
+       main {
+           max-width: 800px;
+           margin: 20px;
+           padding: 20px;
+           background-color: #fff;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+       }
+
+       .main2-container {
+           display: flex;
+           flex-wrap: wrap;
+           justify-content: flex-start; /* Change from space-between to flex-start */
+       }
+
+       .main2 {
+           max-width: 400px;
+           margin: 20px; /* Adjust margin as needed */
+           padding: 20px;
+           background-color: #fff;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           display: inline-block;
+           flex: 1;
+       }
+
+       h1 {
+           color: #fff; /* Adjust text color */
+           margin: 0;
+           flex: 1;
+       }
+
+       .container {
+           width: 100%;
+           margin-bottom: 20px;
+       }
+
+       .container h2 {
+           margin-bottom: 10px;
+       }
+
+       .total-time progress {
+           width: 100%;
+           height: 20px;
+           margin-top: 10px;
+       }
+
+       ul {
+           list-style: none;
+           padding: 0;
+           margin: 0; /* Add this line to remove default margin */
+       }
+
+       li {
+           margin-bottom: 30px;
+       }
+
+       progress {
+         width: 300px; /* Set the desired width */
+         height: 30px; /* Set the desired height */
+       }
+   </style>
+</head>
+<body>
+   <header>
+       <h1>Assignment Tracker</h1>
+   </header>
+   <main>
+       <div class="container">
+           <h2>Estimated HW time tonight</h2>
+           <p id="total-time">{{ total_time }} minutes</p>
+           <progress id="progress" value="{{ total_time }}" max="500"></progress>
+       </div>
+   </main>
+   <div class="main2-container">
+       <div class="main2">
+           <div class="container">
+               <h2>Due Tomorrow</h2>
+               <ul id="due-tomorrow-list">
+                   {% for assignment in assignment_list %}
+                       <li>{{ assignment[0] }} - {{ assignment[1] }} minutes <button onclick="clearAssignment(this)">Clear</button></li>
+                   {% endfor %}
+               </ul>
+           </div>
+       </div>
+       <div class="main2">
+           <div class="container">
+               <h2>Due in a week</h2>
+               <ul id="due-week-list">
+                   {% for assignment in wassignment_list %}
+                       <li>{{ assignment[0] }} - {{ assignment[1] }} minutes <button onclick="clearAssignment(this)">Clear</button></li>
+                   {% endfor %}
+               </ul>
+           </div>
+       </div>
+       <div class="main2">
+           <div class="container">
+               <h2>Due in a month</h2>
+               <ul id="due-month-list">
+                   {% for assignment in massignment_list %}
+                       <li>{{ assignment[0] }} - {{ assignment[1] }} minutes <button onclick="clearAssignment(this)">Clear</button></li>
+                   {% endfor %}
+               </ul>
+           </div>
+       </div>
+   </div>
+
+   <script>
+        function clearAssignment(button) {
+            // Get the parent <li> element
+            var listItem = button.parentNode;
+
+            // Extract the assignment details
+            var assignmentDetails = listItem.textContent.split("-");
+
+            // Extract the time from the <li> element
+            var assignmentTime = parseInt(assignmentDetails[1]);
+
+            // Update the total time
+            var totalTimeElement = document.getElementById("total-time");
+            var totalMinutes = parseInt(totalTimeElement.textContent);
+            var newTotalTime = totalMinutes - assignmentTime;
+            totalTimeElement.textContent = newTotalTime + " minutes";
+
+            // Update the progress bar
+            var progressBar = document.getElementById("progress");
+            progressBar.value = newTotalTime;
+
+            // Remove the <li> element from the list
+            listItem.parentNode.removeChild(listItem);
+
+            // Send a request to the server to notify about the removed assignment
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/remove_assignment", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Send the assignment details to the server
+            xhr.send(JSON.stringify({ assignment: assignmentDetails[0], time: assignmentTime }));
+        }
+   </script>
+</body>
+</html>
