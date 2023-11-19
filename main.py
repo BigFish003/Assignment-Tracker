@@ -32,7 +32,7 @@ def days_until_future_date(input_date):
 
 # OpenAI setup
 client = OpenAI(
-   api_key="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",
+   api_key="replace with api key",
 )
 
 
