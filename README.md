@@ -1,6 +1,6 @@
 How to install:
 
-NOTE: this only works if you use https://aisdblend.instructure.com/
+NOTE: this only works if you use https://aisdblend.instructure.com/ + you need an openai key
 
 1. upload the python code to your IDE, I use pycharm, make sure to include the html file in a templates folder too, heres what mine looks like ![image](https://github.com/BigFish003/Assignment-Tracker/assets/89654438/ea6c6c7d-653c-4372-8b8a-4afe0669b780)
 2. run the flask server and copy the http server it gives you ![image](https://github.com/BigFish003/Assignment-Tracker/assets/89654438/1efa9f7e-f6a2-48d2-a2e0-9c0883e8d7ac)
